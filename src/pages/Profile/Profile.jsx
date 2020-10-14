@@ -9,30 +9,68 @@ import ProfileContent from './ProfileContent';
 
 import styles from './Profile.module.scss';
 
-const Profile = ({ history }) => {
-  const { currentUser } = useContext(AuthContext);
-  const { displayName, email } = currentUser;
+// const Profile = ({ history }) => {
+//   const { currentUser } = useContext(AuthContext);
+//   const { displayName, email } = currentUser;
 
-  //signOut方法暂时没有调用，等待潘哥处理完firebase登录问题后修复 --维尼
-  const signOut = () => {
-    logOut();
-    if (!currentUser) {
-      return (<Redirect to="/" />);
-    }
-  };
+//   //signOut方法暂时没有调用，等待潘哥处理完firebase登录问题后修复 --维尼
+//   const signOut = () => {
+//     logOut();
+//     if (!currentUser) {
+//       return (<Redirect to="/" />);
+//     }
+//   };
 
-  //暂时使用了hack方法达成点击logout返回主页面的效果，等待signOut方法修复后再做修改 --维尼
-  return (
-    <React.Fragment>
-      <button onClick={() => history.push('/')}>Log out</button>
-      <div className={styles.profile_wrapper}>
-        <div className={styles.profile}>
-          <ProfileNav />
-          <ProfileContent />
+//   //暂时使用了hack方法达成点击logout返回主页面的效果，等待signOut方法修复后再做修改 --维尼
+//   return (
+//     <React.Fragment>
+//       <button onClick={() => history.push('/')}>Log out</button>
+//       <div className={styles.profile_wrapper}>
+//         <div className={styles.profile}>
+//           <ProfileNav />
+//           <ProfileContent />
+//         </div>
+//       </div>
+//     </React.Fragment>
+//   );
+// };
+
+class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentNav: 'Account',
+    };
+
+    this.handleNavChange = this.handleNavChange.bind(this);
+  }
+
+  handleNavChange(currentNav) {
+    this.setState({
+      currentNav: currentNav,
+    });
+  }
+
+  render() {
+    const { history } = this.props;
+    const { currentNav } = this.state;
+
+    return (
+      <React.Fragment>
+        <button onClick={() => history.push('/')}>Log out</button>
+        <div className={styles.profile_wrapper}>
+          <div className={styles.profile}>
+            <ProfileNav
+              currentNav={currentNav}
+              handleNavChange={this.handleNavChange}
+            />
+            <ProfileContent currentNav={currentNav} />
+          </div>
         </div>
-      </div>
-    </React.Fragment>
-  );
-};
+      </React.Fragment>
+    );
+  }
+}
 
 export default withRouter(Profile);
