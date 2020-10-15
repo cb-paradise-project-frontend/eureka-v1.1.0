@@ -5,11 +5,13 @@ import styles from './ProfileInputbox.module.scss';
 
 const ProfileInputbox = ({
   label,
+  accountContent,
+  onAccountChange,
 }) => {
   return (
     <React.Fragment>
       <label 
-        for={label}
+        htmlFor={label}
         className={styles.label}
       >
         {label}
@@ -17,6 +19,8 @@ const ProfileInputbox = ({
       <input 
         id ={label}
         className={styles.input}
+        value={accountContent[label]}
+        onChange={onAccountChange(label)}
       >
       </input>
     </React.Fragment>

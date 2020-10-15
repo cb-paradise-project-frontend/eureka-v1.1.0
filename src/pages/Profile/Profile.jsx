@@ -41,9 +41,35 @@ class Profile extends React.Component {
 
     this.state = {
       currentNav: 'Account',
+      account: {
+        Firstname: 'firstname',
+        Lastname: 'lastname',
+        Email: 'email',
+        DOB: 'DOB',
+        Mobile: 'mobile',
+        Location: 'location',
+      },
+      payment: {
+        bankAccount: {
+          holder: 'Alice',
+          accountNumber: '12345678',
+          bsb: '000-000',
+        },
+        billingAddress: {
+          lineOne: 'addres line1',
+          lineTwo: 'address line2 optional',
+          suburb: 'suburb',
+          state: 'state',
+          postcode: 'postcode',
+          country: 'country',
+        },
+      }
     };
 
     this.handleNavChange = this.handleNavChange.bind(this);
+    this.handleInputChangeCreator = this.handleInputChangeCreator.bind(this);
+    this.handleBankChange = this.handleBankChange.bind(this);
+    this.handleBillChange = this.handleBillChange.bind(this);
   }
 
   handleNavChange(currentNav) {
@@ -52,9 +78,38 @@ class Profile extends React.Component {
     });
   }
 
+  handleInputChangeCreator = (key) => ((event) => {
+    const { value } = event.target;
+
+    this.setState((prevState) => (
+      {account:{
+        ...prevState.account,
+        [key]: value,
+      }
+    }), () => console.log(this.state));
+  });
+
+  handleBankChange = (value) => {
+    this.setState((prevState) => (
+      {payment: {
+        ...prevState.payment,
+        bankAccount: value,
+      }}
+    ));
+  };
+
+  handleBillChange = (value) => {
+    this.setState((prevState) => (
+      {payment: {
+        ...prevState.payment,
+        billingAddress: value,
+      }}
+    ));
+  };
+
   render() {
     const { history } = this.props;
-    const { currentNav } = this.state;
+    const { currentNav, account, payment } = this.state;
 
     return (
       <React.Fragment>
@@ -65,7 +120,14 @@ class Profile extends React.Component {
               currentNav={currentNav}
               handleNavChange={this.handleNavChange}
             />
-            <ProfileContent currentNav={currentNav} />
+            <ProfileContent 
+              currentNav={currentNav}
+              accountContent={account}
+              onProfileChange={this.handleInputChangeCreator}
+              paymentContent={payment}
+              onBankChange={this.handleBankChange}
+              onBillChange={this.handleBillChange}
+            />
           </div>
         </div>
       </React.Fragment>
